@@ -1,0 +1,62 @@
+# Environment & Secrets
+# User requested everything to be pushed.
+*.pem
+*.pem
+*.key
+*.pkcs12
+*.p12
+*.pfx
+*serviceaccount*.json
+*firebase*.json
+
+# Databases & Large Files (>100MB)
+# Databases & Large Files (>100MB)
+# User requested everything to be pushed.
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build Outputs & Temporary Files
+dist/
+dist-ssr/
+.output/
+.vinxi/
+.tanstack/
+.nitro/
+.wrangler/
+.lovable/
+*.local
+
+# Python
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Cloudflare / Deployment
+.dev.vars
+
+# IDEs & System Files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
