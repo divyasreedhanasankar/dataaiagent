@@ -13,7 +13,7 @@ def match_template(question: str, intent: dict) -> str | None:
         return "SELECT order_id, payment_type, payment_value FROM payments ORDER BY payment_value DESC LIMIT 1"
         
     # Order queries
-    if ("how many" in q or "count" in q or "number of" in q or "total" in q) and "order" in q and "value" not in q and "expensive" not in q and "status" not in q:
+    if ("how many" in q or "count" in q or "number of" in q or "total" in q) and "order" in q and "value" not in q and "expensive" not in q and "status" not in q and "product" not in q:
         return "SELECT COUNT(*) AS total_orders FROM orders"
     if "order" in q and "status" in q:
         return "SELECT order_status, COUNT(*) AS count FROM orders GROUP BY order_status ORDER BY count DESC"
@@ -42,7 +42,8 @@ def match_template(question: str, intent: dict) -> str | None:
     if "product" in q and "category" in q:
         return "SELECT COALESCE(ct.product_category_name_english, p.product_category_name) AS category, COUNT(*) AS count FROM products p LEFT JOIN category_translation ct ON p.product_category_name = ct.product_category_name GROUP BY category ORDER BY count DESC"
     if ("top" in q or "best" in q or "selling" in q) and "product" in q and "category" not in q:
-        return f"SELECT COALESCE(ct.product_category_name_english, p.product_category_name) AS category, ROUND(SUM(oi.price), 2) AS total_revenue, COUNT(oi.order_id) AS items_sold, p.product_id FROM products p JOIN order_items oi ON p.product_id = oi.product_id LEFT JOIN category_translation ct ON p.product_category_name = ct.product_category_name GROUP BY p.product_id ORDER BY total_revenue DESC LIMIT {limit}"
+        order_by = "items_sold DESC" if ("order" in q or "sold" in q or "volume" in q) else "total_revenue DESC"
+        return f"SELECT COALESCE(ct.product_category_name_english, p.product_category_name) AS category, ROUND(SUM(oi.price), 2) AS total_revenue, COUNT(oi.order_id) AS items_sold, p.product_id FROM products p JOIN order_items oi ON p.product_id = oi.product_id LEFT JOIN category_translation ct ON p.product_category_name = ct.product_category_name GROUP BY p.product_id ORDER BY {order_by} LIMIT {limit}"
     if "top" in q and "category" in q and ("revenue" in q or "selling" in q):
         return f"SELECT COALESCE(ct.product_category_name_english, p.product_category_name) AS category, COUNT(oi.order_id) AS items_sold, ROUND(SUM(oi.price), 2) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id LEFT JOIN category_translation ct ON p.product_category_name = ct.product_category_name GROUP BY category ORDER BY total_revenue DESC LIMIT {limit}"
         

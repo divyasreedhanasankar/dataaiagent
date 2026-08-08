@@ -77,14 +77,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "DataMind AI — Conversational Database Intelligence" },
+      {
+        name: "description",
+        content:
+          "Conversational Database Intelligence Platform for natural language database queries, SQL generation, charts, ER diagrams and business insights.",
+      },
+      { name: "author", content: "DataMind AI" },
+      { property: "og:title", content: "DataMind AI — Conversational Database Intelligence" },
+      {
+        property: "og:description",
+        content:
+          "Conversational Database Intelligence Platform for natural language database queries, SQL generation, charts, ER diagrams and business insights.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@DataMindAI" },
     ],
     links: [
       {

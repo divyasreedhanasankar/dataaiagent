@@ -1,3 +1,16 @@
+from app.services.answer_generator import _is_currency_col, _COUNT_KEYWORDS
+
+
+def _fmt(val: float, col: str) -> str:
+    """Format a numeric value: currency gets ₹ and 2dp; counts get comma-separated integers; others get 2dp."""
+    if _is_currency_col(col):
+        return f"₹{val:,.2f}"
+    col_lower = col.lower()
+    if any(kw in col_lower for kw in _COUNT_KEYWORDS) or float(val) == int(val):
+        return f"{int(val):,}"
+    return f"{val:,.2f}"
+
+
 def analyze_results(data: list[dict], question: str, intent: dict) -> list[str]:
     if not data:
         return []
@@ -55,17 +68,17 @@ def analyze_results(data: list[dict], question: str, intent: dict) -> list[str]:
                 max_row = next((r for r in data if r.get(col) is not None and float(r[col]) == max_val), data[0])
                 min_row = next((r for r in data if r.get(col) is not None and float(r[col]) == min_val), data[0])
                 
-                insights.append(f"For {col.replace('_', ' ').title()}, the total sum is {total_sum:,.2f}.")
-                insights.append(f"The average {col.replace('_', ' ').title()} is {avg:,.2f}.")
+                insights.append(f"For {col.replace('_', ' ').title()}, the total sum is {_fmt(total_sum, col)}.")
+                insights.append(f"The average {col.replace('_', ' ').title()} is {_fmt(avg, col)}.")
                 
                 # Try to use another column for context
                 context_col = columns[0] if columns[0] != col else (columns[1] if len(columns) > 1 else None)
                 if context_col:
-                    insights.append(f"The maximum value is {max_val:,.2f} ({max_row.get(context_col)}) and minimum is {min_val:,.2f} ({min_row.get(context_col)}).")
+                    insights.append(f"The maximum value is {_fmt(max_val, col)} ({max_row.get(context_col)}) and minimum is {_fmt(min_val, col)} ({min_row.get(context_col)}).")
                 else:
-                    insights.append(f"The maximum value is {max_val:,.2f} and minimum is {min_val:,.2f}.")
+                    insights.append(f"The maximum value is {_fmt(max_val, col)} and minimum is {_fmt(min_val, col)}.")
                     
-                insights.append(f"The range is {range_val:,.2f}.")
+                insights.append(f"The range is {_fmt(range_val, col)}.")
                 
                 # Try to find dominant category if there's a string column
                 string_cols = [c for c in columns if c not in numeric_cols]
@@ -105,7 +118,7 @@ def analyze_results(data: list[dict], question: str, intent: dict) -> list[str]:
                 sec_val = float(sorted_data[1][sort_col])
                 last_val = float(sorted_data[-1][sort_col])
                 
-                insights.append(f"The gap between the #1 and #2 items is {(top_val - sec_val):,.2f}.")
-                insights.append(f"The gap between the top and bottom items is {(top_val - last_val):,.2f}.")
+                insights.append(f"The gap between the #1 and #2 items is {_fmt(top_val - sec_val, sort_col)}.")
+                insights.append(f"The gap between the top and bottom items is {_fmt(top_val - last_val, sort_col)}.")
                 
     return insights[:7] # limit to 3-7 insights

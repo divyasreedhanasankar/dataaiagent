@@ -255,13 +255,19 @@ def _extract_tables(sql: str) -> list[str]:
 
 def _fallback_answer(data: list, columns: list, row_count: int) -> str:
     """Generate a basic answer when the answer generator fails."""
+    from app.services.answer_generator import _is_currency_col
     if not data:
         return "The query executed successfully, but no matching data was found."
     if row_count == 1 and len(columns) == 1:
         key = columns[0]
         val = data[0].get(key, "N/A")
         if isinstance(val, (int, float)):
-            val = f"{val:,.2f}"
+            if _is_currency_col(key):
+                val = f"₹{val:,.2f}"
+            elif float(val) == int(val):
+                val = f"{int(val):,}"
+            else:
+                val = f"{val:,.2f}"
         return f"The **{key.replace('_', ' ').title()}** is **{val}**."
     return f"The query returned **{row_count:,}** records across **{len(columns)}** columns. See the detailed table below."
 

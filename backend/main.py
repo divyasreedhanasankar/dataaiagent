@@ -98,6 +98,18 @@ def get_database_schema():
 
 
 # ==========================================
+# CACHE CLEAR
+# ==========================================
+
+@app.post("/api/cache/clear")
+def clear_cache():
+    """Flush the in-memory query cache."""
+    from app.services.cache import query_cache
+    query_cache.clear()
+    return {"success": True, "message": "Cache cleared"}
+
+
+# ==========================================
 # ROOT
 # ==========================================
 
