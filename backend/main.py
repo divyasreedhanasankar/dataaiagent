@@ -54,6 +54,9 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ],
+    # Allow any *.vercel.app subdomain for Vercel preview and production deployments.
+    # This is deployment-only; no application behavior is changed.
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

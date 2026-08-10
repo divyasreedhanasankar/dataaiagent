@@ -48,6 +48,7 @@ htmlcov/
 
 # Cloudflare / Deployment
 .dev.vars
+.vercel/
 
 # IDEs & System Files
 .vscode/*
